@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sight Words Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            color: #333;
+        }
+        .logo {
+            width: 100px;
+            margin-top: 20px;
+        }
+        .instructions {
+            margin: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+        .sight-word {
+            font-size: 32px;
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .word-container {
+            margin-top: 20px;
+        }
+        .word {
+            margin: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            display: inline-block;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #e7f3fe;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .more-lessons-btn {
+            margin-top: 80px; /* Adjusted to move button two lines down */
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .more-lessons-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Logo -->
+<img src="https://i.imgur.com/mwpTHJj.png" class="logo" alt="Logo">
+
+<h1>Sight Words Practice</h1>
+
+<!-- Instructions -->
+<div class="instructions">
+    Click on the correct sight word from the options below. Try to remember how to spell it!
+</div>
+
+<!-- Display the sight word -->
+<div class="sight-word" id="sightWord">the</div>
+
+<!-- Word options -->
+<div class="word-container" id="wordOptions"></div>
+
+<!-- Feedback message -->
+<div class="feedback" id="feedbackMessage"></div>
+
+<!-- "More Lessons" button -->
+<a href="https://sites.google.com/view/grades-1/home" class="more-lessons-btn">More Lessons</a>
+
+<!-- JavaScript -->
+<script>
+    const feedbackMessage = document.getElementById('feedbackMessage');
+    const sightWord = document.getElementById('sightWord');
+    const wordOptions = document.getElementById('wordOptions');
+
+    // List of sight words
+    const sightWords = [
+        'the', 'is', 'and', 'to', 'in', 'it', 'you', 'that', 'he', 'was',
+        'for', 'on', 'are', 'as', 'with', 'his', 'they', 'at', 'be', 'this'
+    ];
+
+    let currentWord = null;
+
+    // Function to shuffle array
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Generate a random sight word and setup the game
+    function setupGame() {
+        // Clear previous feedback
+        feedbackMessage.innerText = '';
+
+        // Select a random sight word
+        currentWord = sightWords[Math.floor(Math.random() * sightWords.length)];
+        sightWord.innerText = currentWord;
+
+        // Generate options including the correct word and shuffle them
+        const options = shuffle([currentWord, ...sightWords.filter(word => word !== currentWord).slice(0, 3)]);
+        
+        // Clear the options container
+        wordOptions.innerHTML = '';
+
+        // Create word options
+        options.forEach(word => {
+            const wordElement = document.createElement('div');
+            wordElement.classList.add('word');
+            wordElement.innerText = word;
+            wordElement.onclick = () => checkAnswer(word);
+            wordOptions.appendChild(wordElement);
+        });
+    }
+
+    // Check if the selected word is correct
+    function checkAnswer(selectedWord) {
+        if (selectedWord === currentWord) {
+            feedbackMessage.innerText = "Congratulations! Great job!";
+            feedbackMessage.style.color = "green";
+            setTimeout(setupGame, 2000); // Automatically go to the next word after a delay
+        } else {
+            feedbackMessage.innerText = "Oh Sorry, Try again!";
+            feedbackMessage.style.color = "red";
+        }
+    }
+
+    // Start the game
+    setupGame();
+</script>
+
+</body>
+</html>
